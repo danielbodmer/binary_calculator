@@ -37,7 +37,7 @@ const calc = (nums, methods) => {
         break;
 
       case '/':
-        answer /= nums[i + 1];
+        answer = Math.floor((answer /= nums[i + 1]));
         break;
     }
   }
