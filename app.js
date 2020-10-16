@@ -9,13 +9,39 @@ const btnDiv = document.querySelector('#btnDiv');
 const res = document.querySelector('#res');
 
 const sym = ['-', '+', '*', '/'];
-const vals = [];
+let cals = [];
+let vals = [];
 let binStr = '';
 let answer = 0;
 
 const clear = () => {
   res.value = null;
   vals = [];
+  cals = [];
+  binStr = '';
+  answer = 0;
+};
+
+const calc = (nums, methods) => {
+  answer = nums[0] || 0;
+  for (let i = 0; i < nums.length - 1; i++) {
+    switch (methods[i]) {
+      case '-':
+        answer -= nums[i + 1];
+        break;
+      case '+':
+        answer += nums[i + 1];
+        break;
+      case '*':
+        answer *= nums[i + 1];
+        break;
+
+      case '/':
+        answer /= nums[i + 1];
+        break;
+    }
+  }
+  console.log(answer);
 };
 
 const updateScreen = (val) => () => {
@@ -26,6 +52,7 @@ const updateScreen = (val) => () => {
     case '/':
       if (res.value && !sym.includes(res.value[res.value.length - 1])) {
         vals.push(parseInt(binStr, 2));
+        cals.push(val);
         binStr = '';
         res.value += val;
       }
@@ -34,11 +61,16 @@ const updateScreen = (val) => () => {
       res.value += val;
       binStr += val;
   }
-  console.log(vals);
 };
 
 const equal = () => {
-  res.value = answer;
+  vals.push(parseInt(binStr, 2));
+  if (sym.includes(res.value[res.value.length - 1])) {
+    res.value = res.value.substring(0, res.value.length - 1);
+    cals.pop();
+  }
+  calc(vals, cals);
+  res.value = answer.toString(2);
 };
 
 btnClr.onclick = clear;
